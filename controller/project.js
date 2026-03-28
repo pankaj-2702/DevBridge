@@ -1,13 +1,13 @@
 
 const Project = require('../model/project')
-const {BadRequest , NotFoundError} = require('../errors/index')
+const {BadRequestError , NotFoundError} = require('../errors/index')
 
 //create Project
 const createProject = async (req,res) =>{
     const { title , description ,budget } = req.body
 
      if(title=='' || description=='' || !budget || budget==0){
-          throw new BadRequest('Please provide the Vaild INFO!')
+          throw new BadRequestError('Please provide the Vaild INFO!')
       }
      req.body.clientId = req.user.userId
 
@@ -36,15 +36,18 @@ const getProject = async (req,res) =>{
 
 const updateProject = async (req,res) =>{
     const {id} = req.params
+    const userId = req.user.userId
     const { title , description ,budget } = req.body
      if(title=='' || description=='' || !budget || budget==0){
-          throw new BadRequest('Please provide the Vaild INFO!')
+          throw new BadRequestError('Please provide the Vaild INFO!')
       }
-    const project = await Project.findOneAndUpdate({_id : id, clientId : req.user.userId},
+
+     
+    const project = await Project.findOneAndUpdate({_id : id, clientId : req.user.userId , status : "OPEN"},
                                                      req.body,
                                                      {returnDocument : 'after' , runValidators: true})
      if(!project){
-    NotFoundError('No Project is found');
+       throw new NotFoundError('No Project is found');
   }                                                 
 
     res.status(200).json({project})

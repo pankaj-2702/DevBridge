@@ -27,7 +27,7 @@ app.use('/api/proposals',ProposalRoute)
 // Contract Router 
 const ContractRoute = require('./route/contract')
 
-app.use('/api/proposals',ContractRoute)
+app.use('/api/contracts',ContractRoute)
 
 
 app.use(errorHandlerMiddleware)
