@@ -45,6 +45,10 @@ const UserSchema = new mongoose.Schema({
          type : String,
         default :''
     },
+    profilePhotoId:{
+    type: String,
+    default: ''
+     },
     rating : {
         type : Number,
         default :0,

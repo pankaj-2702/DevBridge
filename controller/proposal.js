@@ -1,6 +1,7 @@
 const Proposal = require('../model/proposal')
 const { findOneAndUpdate } = require('../model/user')
 const {NotFoundError} = require('../errors/index')
+
 const createProposal = async (req, res)=>{
     const {id} = req.params
     req.body.developerId = req.user.userId
@@ -12,9 +13,9 @@ const createProposal = async (req, res)=>{
 
 const getProposal = async (req,res)=>{
    const{id} = req.params
-  console.log(id)
+   console.log(id)
 
-   const proposal = await Proposal.find({projectId : id})
+   const proposal = await Proposal.find({projectId : id })
 
    res.status(200).json({proposal})
 

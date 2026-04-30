@@ -29,6 +29,18 @@ const ContractRoute = require('./route/contract')
 
 app.use('/api/contracts',ContractRoute)
 
+ // Get Users 
+const userRoutes = require('./route/users');
+app.use('/api/users', userRoutes);
+
+//Send Messages
+const messageRoutes = require('./route/Messages');
+app.use('/api/messages', messageRoutes);
+
+// Review Route
+
+const ReviewRoute = require('./route/Review')
+app.use('/api/reviews',ReviewRoute)
 
 app.use(errorHandlerMiddleware)
 const port = 3000;

@@ -21,7 +21,7 @@ const errorHandlerMiddleware = (err, req, res, next) => {
     customError.statusCode = 404
   }
 
-  console.error(err) // helpful for debugging
+  console.error(err) 
 
  // return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ err : err })
   return res.status(customError.statusCode).json({ message: customError.message })
