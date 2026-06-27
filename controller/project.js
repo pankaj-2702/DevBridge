@@ -27,7 +27,7 @@ const getAllProjects = async (req,res) =>{
 const getProject = async (req,res) =>{
     const {id} = req.params
     console.log(id)
-    const project = await Project.findOne({_id : id})
+    const project = await Project.findOne({_id : id}).populate("clientId", "name profilePhoto");
   if(!project){
    new NotFoundError('No Project is found');
   }
@@ -61,10 +61,23 @@ const deleteProject = async (req,res) =>{
     res.status(200).send("Success")
 }
 
+
+// Get my Projects only 
+
+const getMyProjects = async (req, res) => {
+
+    const projects = await Project
+        .find({ clientId: req.user.userId })
+        .sort({ createdAt: -1 });
+
+    res.status(200).json({ projects });
+
+};
 module.exports ={
     createProject,
     getAllProjects,
     getProject,
     updateProject,
-    deleteProject
+    deleteProject,
+    getMyProjects
 }

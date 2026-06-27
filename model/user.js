@@ -31,16 +31,33 @@ const UserSchema = new mongoose.Schema({
     },
     bio : {
         type :String,
-        maxlength : 500
+        maxlength : [500,"Bio cannot exceed 500 characters"]
     },
     skills : {
         type : [String],
         default :[]
     },
-    portfolioLinks :{
-        type : [String],
-        default :[]
-    },
+   portfolioLinks: {
+    type: [
+        {
+            title: {
+                type: String,
+                trim: true,
+                required : [true,"Please provide title"]
+            },
+            link: {
+                type: String,
+                trim: true,
+                required : [true,"Please provide URL"],
+                match: [
+        /^https?:\/\/.+/,
+        "Please provide a valid URL"
+    ]
+            }
+        }
+    ],
+    default: []
+},
     profilePhoto :{
          type : String,
         default :''
@@ -63,8 +80,14 @@ const UserSchema = new mongoose.Schema({
     isActive :{
         type :Boolean,
         default :true
+    },
+    
+},
+{
+        timestamps: true
     }
-})
+
+)
 
 UserSchema.pre('save', async function() {
      const salt = await bcrypt.genSalt(10)
@@ -73,7 +96,7 @@ UserSchema.pre('save', async function() {
 })
 
 UserSchema.methods.createJWT = function (){
-    return jwt.sign({userID : this._id , name : this.name , role : this.role},process.env.JWT_SECRET,{ expiresIn :process.env.LIFETIME})
+    return jwt.sign({userID : this._id , name : this.name , role : this.role},process.env.JWT_SECRET,{ expiresIn :process.env.LIFETIME || '30d'})
 }
 
 UserSchema.methods.comparePassword = async function (candidatePassword) {

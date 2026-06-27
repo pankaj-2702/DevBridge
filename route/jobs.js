@@ -1,4 +1,4 @@
-const {createProject , getAllProjects, getProject , updateProject , deleteProject} = require('../controller/project')
+const {createProject , getAllProjects, getProject , updateProject , deleteProject, getMyProjects} = require('../controller/project')
 const {createProposal , getProposal} = require('../controller/proposal')
 
 const authentication = require('../middleware/authentication')
@@ -22,5 +22,6 @@ Route.route('/:id').get(authentication,getProject)
                    .delete(authentication,authorise('client'),deleteProject)
 
 Route.route('/:id/proposals').get(authentication,authorise('client'),getProposal)                   
+Route.route('/my-projects').get(authentication,authorise('client'),getMyProjects) 
 
 module.exports = Route

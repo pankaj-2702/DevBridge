@@ -8,6 +8,14 @@ const {register ,login} = require('./controller/auth')
 //connect to DATABASE
 const connectBD = require('./db/connectDB')
 //
+
+//for FrontEnd and Backend Connection
+const cors = require('cors');
+
+app.use(cors({
+    origin: 'http://localhost:5173',  // your frontend URL
+    credentials: true,                // allow cookies/auth headers
+}));
 app.use(express.json())
 
 // Auth Router 

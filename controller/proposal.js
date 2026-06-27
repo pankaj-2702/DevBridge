@@ -1,12 +1,19 @@
 const Proposal = require('../model/proposal')
 const { findOneAndUpdate } = require('../model/user')
 const {NotFoundError} = require('../errors/index')
-
+const Project = require("../model/project");
 const createProposal = async (req, res)=>{
     const {id} = req.params
     req.body.developerId = req.user.userId
     req.body.projectId = id
     const proposal = await Proposal.create(req.body)
+
+      await Project.findByIdAndUpdate(
+        id,
+        {
+            $inc: { proposalCount: 1 }
+        }
+    );
 
     res.status(201).json({message : 'Created', proposal})
 }
@@ -16,6 +23,8 @@ const getProposal = async (req,res)=>{
    console.log(id)
 
    const proposal = await Proposal.find({projectId : id })
+
+   
 
    res.status(200).json({proposal})
 
@@ -52,7 +61,14 @@ const withdrawProposal = async (req, res)=>{
 }
 const myProposals = async (req, res)=>{
    
-   const proposals = await Proposal.find({ developerId : req.user.userId})
+   const proposals = await Proposal.find({
+    developerId: req.user.userId
+})
+.populate(
+    "projectId",
+    "title budget status clientId createdAt"
+)
+.sort({ createdAt: -1 });
      if(!proposals){
                     throw new NotFoundError('No Proposal is found');
                }                                                 
