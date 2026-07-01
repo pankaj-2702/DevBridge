@@ -43,7 +43,8 @@ const login = async (req , res) => {
      res.status(StatusCodes.OK).json({user:
                                         {name:user.name,
                                          role : user.role,
-                                         profilePhoto : user.profilePhoto 
+                                         profilePhoto : user.profilePhoto,
+                                         _id : user._id 
                                         } , 
                                         token : token,
                                         role : user.role

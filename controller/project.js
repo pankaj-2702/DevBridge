@@ -19,7 +19,7 @@ const createProject = async (req,res) =>{
 // get ALL Project
 const getAllProjects = async (req,res) =>{
 
-    const projects = await Project.find({status : 'OPEN'})
+    const projects = await Project.find({status : 'OPEN'}).sort({createdAt : -1})
 
     res.status(200).json({projects})
 }
@@ -33,6 +33,9 @@ const getProject = async (req,res) =>{
   }
     res.status(200).json({project})
 }
+
+
+
 
 const updateProject = async (req,res) =>{
     const {id} = req.params
@@ -67,8 +70,8 @@ const deleteProject = async (req,res) =>{
 const getMyProjects = async (req, res) => {
 
     const projects = await Project
-        .find({ clientId: req.user.userId })
-        .sort({ createdAt: -1 });
+        .find({ clientId: req.user.userId }).sort({createdAt : -1})
+        
 
     res.status(200).json({ projects });
 

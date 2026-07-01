@@ -39,7 +39,17 @@ const createReview = async (req, res) => {
     const reviewerId = req.user.userId;
     const revieweeId = contract.clientId.toString() === req.user.userId
         ? contract.developerId  
-        : contract.clientId;      
+        : contract.clientId;     
+        
+        
+  const existingReview = await Review.findOne({
+    contractId,
+    reviewerId
+});
+
+if (existingReview) {
+    throw new BadRequestError("You have already reviewed this contract");
+}
 
     // Create review
     const review = await Review.create({

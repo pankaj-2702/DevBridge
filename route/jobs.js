@@ -15,13 +15,12 @@ Route.route('/').get(
     authorise('client'),
     createProject
     )
-
-
+Route.route('/me').get(authentication,authorise('client'),getMyProjects) 
 Route.route('/:id').get(authentication,getProject)
                    .patch(authentication,authorise('client'),updateProject)
                    .delete(authentication,authorise('client'),deleteProject)
 
 Route.route('/:id/proposals').get(authentication,authorise('client'),getProposal)                   
-Route.route('/my-projects').get(authentication,authorise('client'),getMyProjects) 
+
 
 module.exports = Route

@@ -2,7 +2,12 @@ const Proposal = require('../model/proposal')
 const { findOneAndUpdate } = require('../model/user')
 const {NotFoundError} = require('../errors/index')
 const Project = require("../model/project");
+
+
+
 const createProposal = async (req, res)=>{
+
+   // console.log("createProposal called");
     const {id} = req.params
     req.body.developerId = req.user.userId
     req.body.projectId = id
@@ -19,10 +24,22 @@ const createProposal = async (req, res)=>{
 }
 
 const getProposal = async (req,res)=>{
+   const { id } = req.params
+
+   const proposals = await Proposal.find({ projectId : id })
+      .populate(
+         "developerId",
+         "name profilePhoto"
+      );
+
+   res.status(200).json({ proposals })
+}
+
+const getProposalById = async (req,res)=>{
    const{id} = req.params
    console.log(id)
 
-   const proposal = await Proposal.find({projectId : id })
+   const proposal = await Proposal.findOne({_id: id })
 
    
 
@@ -48,6 +65,7 @@ const updateProposals = async (req, res)=>{
                  res.status(200).json({proposals})                                         
 }
 
+
 const withdrawProposal = async (req, res)=>{
    const {id} = req.params
 
@@ -59,6 +77,7 @@ const withdrawProposal = async (req, res)=>{
                  res.status(200).send('Successful DELETE the Porposal') 
 
 }
+
 const myProposals = async (req, res)=>{
    
    const proposals = await Proposal.find({
@@ -82,5 +101,6 @@ module.exports = {
     getProposal,
     updateProposals,
     withdrawProposal,
-    myProposals
+    myProposals,
+    getProposalById
 }

@@ -56,7 +56,7 @@ const getContract = async (req, res) => {
     const userId  = req.user.userId
 
     const contract = await Contract.findById({_id : id})
-        .populate('projectId',   'title description status budget skillsRequired')
+        .populate('projectId',   'title description status budget skillsRequired createdAt')
         .populate('clientId',    'name email bio profilePhoto rating')
         .populate('developerId', 'name email bio profilePhoto skills rating')
         .populate('proposalId',  'coverLetter bidAmount')
@@ -90,15 +90,20 @@ const getAllContracts = async (req ,res)=>{
 
      console.log(query)
     const contracts = await Contract.find(query)
-        .populate('projectId',  'title status')
-        .populate('clientId',   'name email')
-        .populate('developerId','name email')
-        .sort({ createdAt: -1 })
+    .populate('projectId', 'title status budget')
+    .populate('clientId', 'name profilePhoto')
+    .populate('developerId', 'name profilePhoto')
+    .sort({ createdAt: -1 });
 
-    if(!contracts){
+  if(!contracts){
         throw new NotFoundError('No contract is found')
     }
-    res.status(200).json({contracts})
+
+
+res.status(200).json({ contracts });
+
+    
+    
 }
 
 module.exports = { completeContract ,getContract , getAllContracts}
